@@ -1,0 +1,7 @@
+spring.kafka:
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: raspberrypi:9092
+      enable-auto-commit: true
+      group-id: rest-web

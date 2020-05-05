@@ -10,10 +10,7 @@ import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -55,6 +52,7 @@ public class RestConfig {
         return 1;
     }
 
+    @Profile("!kafka")
     @Bean
     public SimpleRabbitListenerContainerFactory listenerFactory(ConnectionFactory connectionFactory) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
@@ -63,6 +61,7 @@ public class RestConfig {
         return factory;
     }
 
+    @Profile("!kafka")
     @Bean
     public Queue offlineQueue() {
         return new Queue(ImConstant.MQ_OFFLINE_QUEUE);

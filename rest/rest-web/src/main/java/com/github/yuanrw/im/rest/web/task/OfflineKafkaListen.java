@@ -10,10 +10,8 @@ import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,15 +22,15 @@ import javax.annotation.PostConstruct;
  *
  * @author yrw
  */
-@Profile("!kafka")
+@Profile("kafka")
 @Component
-public class OfflineListen implements ChannelAwareMessageListener {
-    private Logger logger = LoggerFactory.getLogger(OfflineListen.class);
+public class OfflineKafkaListen {
+    private Logger logger = LoggerFactory.getLogger(OfflineKafkaListen.class);
 
     private ParseService parseService;
     private OfflineService offlineService;
 
-    public OfflineListen(OfflineService offlineService) {
+    public OfflineKafkaListen(OfflineService offlineService) {
         this.parseService = new ParseService();
         this.offlineService = offlineService;
     }
@@ -42,9 +40,9 @@ public class OfflineListen implements ChannelAwareMessageListener {
         logger.info("[OfflineConsumer] Start listening Offline queue......");
     }
 
-    @Override
-    @RabbitHandler
-    @RabbitListener(queues = ImConstant.MQ_OFFLINE_QUEUE, containerFactory = "listenerFactory")
+//    @RabbitHandler
+//    @RabbitListener(queues = ImConstant.MQ_OFFLINE_QUEUE, containerFactory = "listenerFactory")
+    @KafkaListener(topics=ImConstant.MQ_OFFLINE_QUEUE)
     public void onMessage(Message message, Channel channel) throws Exception {
         logger.info("[OfflineConsumer] getUserSpi msg: {}", message.toString());
         try {

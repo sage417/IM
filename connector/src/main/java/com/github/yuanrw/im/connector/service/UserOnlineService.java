@@ -52,12 +52,10 @@ public class UserOnlineService {
         //get all offline msg and send
         List<Message> msgs = offlineService.pollOfflineMsg(userId);
         msgs.forEach(msg -> {
-            try {
-                Chat.ChatMsg chatMsg = (Chat.ChatMsg) msg;
-                connectorToClientService.doChatToClientAndFlush(chatMsg);
-            } catch (ClassCastException ex) {
-                Ack.AckMsg ackMsg = (Ack.AckMsg) msg;
-                connectorToClientService.doSendAckToClientAndFlush(ackMsg);
+            if (msg instanceof Chat.ChatMsg) {
+                connectorToClientService.doChatToClientAndFlush((Chat.ChatMsg)msg);
+            } else if (msg instanceof Ack.AckMsg) {
+                connectorToClientService.doSendAckToClientAndFlush((Ack.AckMsg)msg);
             }
         });
 

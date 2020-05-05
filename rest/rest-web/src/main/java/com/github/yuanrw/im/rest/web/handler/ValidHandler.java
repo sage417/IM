@@ -33,7 +33,7 @@ public class ValidHandler {
                         return block.apply(Mono.just(body));
                     } else {
                         ConstraintViolation v = Iterables.get(msg, 0);
-                        throw new ImException(v.getPropertyPath() + " " + v.getMessage());
+                        return Mono.error(new ImException(v.getPropertyPath() + " " + v.getMessage()));
                     }
                 }
             );

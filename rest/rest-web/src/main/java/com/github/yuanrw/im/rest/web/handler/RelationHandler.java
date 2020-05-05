@@ -45,8 +45,8 @@ public class RelationHandler {
         String u1 = request.queryParam("userId1").orElseThrow(() -> new ImException("parameter userId1 can not be null"));
         String u2 = request.queryParam("userId2").orElseThrow(() -> new ImException("parameter userId2 can not be null"));
 
-        Long userId1 = Long.parseLong(u1);
-        Long userId2 = Long.parseLong(u2);
+        long userId1 = Long.parseLong(u1);
+        long userId2 = Long.parseLong(u2);
 
         Mono<Relation> relationMono = Mono.fromCallable(() -> relationService.getOne(new LambdaQueryWrapper<Relation>()
             .eq(Relation::getUserId1, Math.min(userId1, userId2))
